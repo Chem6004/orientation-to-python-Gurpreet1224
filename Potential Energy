@@ -141,8 +141,8 @@ plt.show()
 #in atomic units and also convert to a common spectroscopic unit system of your choosing (wavenumbers, nm, microns,
 #Hertz, THz are all acceptable choices).
 u = np.sqrt (k/mu)
-print("Mu is", u)
-#Mu= 0.0085131 
+print("Vibrational Freqency is", u)
+#VF= 0.0085131 
 
 #Question 3: What will be the accelation of the bond stretch when C is 
 #separated by O by 3 atomic units? You can express your acceleration in atomic units, also.
