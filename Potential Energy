@@ -64,11 +64,7 @@ k = cE(r_eq)
 
 ### define reduced mass of CO as m_C * m_O /(m_C + m_O) where mass is in atomic units (electron mass = 1)
 mu = 13625.
-#Q1 mu= mC*mO/ mC+mO 
-# (12*16 / 12+16 ) *(1.6604 * e-27) = 1.13856 * 10^-26 kg 
-#Q2
-u = np.sqrt (k/mu)
-print("Mu is", u)
+
 ### define "ground-state" velocity:
 v = np.sqrt( np.sqrt(k/mu)/(2*mu))
 
@@ -146,6 +142,7 @@ plt.show()
 #Hertz, THz are all acceptable choices).
 u = np.sqrt (k/mu)
 print("Mu is", u)
+#Mu= 0.0085131 
 
 #Question 3: What will be the accelation of the bond stretch when C is 
 #separated by O by 3 atomic units? You can express your acceleration in atomic units, also.
