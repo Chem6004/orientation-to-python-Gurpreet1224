@@ -41,6 +41,7 @@ fE = sE.derivative()
 ### force is the negative of the derivative
 F_fine = -1*fE(r_fine)
 
+
 ### plot the forces
 plt.plot(r_fine, np.abs(F_fine), 'black')
 plt.xlim(1,5)
@@ -63,7 +64,11 @@ k = cE(r_eq)
 
 ### define reduced mass of CO as m_C * m_O /(m_C + m_O) where mass is in atomic units (electron mass = 1)
 mu = 13625.
-
+#Q1 mu= mC*mO/ mC+mO 
+# (12*16 / 12+16 ) *(1.6604 * e-27) = 1.13856 * 10^-26 kg 
+#Q2
+u = np.sqrt (k/mu)
+print("Mu is", u)
 ### define "ground-state" velocity:
 v = np.sqrt( np.sqrt(k/mu)/(2*mu))
 
@@ -129,3 +134,21 @@ plt.show()
 ### plot the phase space trajectory of position vs momentum
 plt.plot(mu*v_vs_t, r_vs_t, 'blue')
 plt.show()
+
+#Question 1: What is the reduced mass of the CO molecule in atomic units?
+#mu= 13625
+#mu= mC*mO/ mC+mO 
+# (12*16 / 12+16 ) *(1.6604 * e-27) = 1.13856 * 10^-26 kg 
+# u= 1.13856 * 10^-26 kg 
+
+#Question 2: Use your spline fit to the PES of CO to estimate the vibrational frequency of CO. Express your number 
+#in atomic units and also convert to a common spectroscopic unit system of your choosing (wavenumbers, nm, microns,
+#Hertz, THz are all acceptable choices).
+u = np.sqrt (k/mu)
+print("Mu is", u)
+
+#Question 3: What will be the accelation of the bond stretch when C is 
+#separated by O by 3 atomic units? You can express your acceleration in atomic units, also.
+a = -1*fE(3)/mu
+print ("Acceleration is ", a) 
+#Acceleration is -1.6825681 e-05 
