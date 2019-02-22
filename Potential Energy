@@ -135,7 +135,7 @@ plt.show()
 #mu= 13625
 #mu= mC*mO/ mC+mO 
 # (12*16 / 12+16 ) *(1.6604 * e-27) = 1.13856 * 10^-26 kg 
-# u= 1.13856 * 10^-26 kg 
+# mu= 1.13856 * 10^-26 kg 
 
 #Question 2: Use your spline fit to the PES of CO to estimate the vibrational frequency of CO. Express your number 
 #in atomic units and also convert to a common spectroscopic unit system of your choosing (wavenumbers, nm, microns,
