@@ -1,17 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar  1 11:43:57 2019
-
-@author: longiag
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 22 13:36:00 2019
-
-@author: longiag
-"""
-
 import numpy as np
 from matplotlib import pyplot as plt
 from scipy.interpolate import InterpolatedUnivariateSpline
@@ -105,16 +91,16 @@ rp_init = np.sqrt(2*temperature*gamma*mu/dt)*np.random.normal(0,1)
 def BBK(r_curr, v_curr, rp_curr, gamma_val, temperature_val, mu, f_interp, dt):
     
     ### get acceleration at current time: (force + current perturbation on force)/mass - drag
-    a_curr = (-1*f_interp(r_curr) + rp_curr)/mu - gamma_val*v_curr
+    a_curr = (-1 * f_interp(r_curr) + rp_curr)/mu - gamma_val * v_curr
     ### THE ABOVE IS EQUATION 6 IN THE ASSIGNMENT DAS POSTED
-    v_curr = a_curr * dt
+    #v_curr = a_curr * dt
     ### update velocity for half time step, for such a small time step can approximate dv = adt
     ### THINK ABOUT IT: DO YOU REALLY HAVE TO DO THIS STEP?
     
    
     ### use current acceleration and velocity to update position
     ### WRITE CODE IMPLEMENTING THE FORMULA YOU OBTAINED, AS PART OF EXERCISE 1, FOR r(t+dt) HERE
-   r(t+dt) = 
+    r_fut = r_curr + v_curr + a_curr * ((dt**2) /2) 
    
     ### calculate the rp_future
     rp_fut = np.sqrt(2*temperature_val*gamma_val*mu/dt)*np.random.normal(0,1)
@@ -122,13 +108,14 @@ def BBK(r_curr, v_curr, rp_curr, gamma_val, temperature_val, mu, f_interp, dt):
     ### use rp_fut to get future acceleration a_fut (a_tilde at the future time in the assignment), 
     ### note that we cannot take future drag into account as we have not calculated our future velocity yet
     ### CODE IMPLEMENTING EQUATION 7 IN THE ASSIGNMENT DAS POSTED GOES HERE
-    a_fut = 
+    a_fut = (-1 * f_interp(r_fut) * dt + rp_fut * dt) / mu
     
     ### use current and future acceleration to get future velocity v_fut
     ### note that we have to "correct" our formula relative to the formula for velocity Verlet
     ### as we have not included our future drag in our future acceleration
     
-    v_fut = (v_halftime + 0.5*a_fut*dt)/(1+0.5*gamma_val*dt)
+    v_fut = (v_curr + 0.5 * a_curr * dt + 0.5 * a_fut *dt) / (1 + 0.5 * gamma_val * dt)
+    #v_fut = (v_halftime + 0.5*a_fut*dt)/(1+0.5*gamma_val*dt)
     ### WRITE CODE IMPLEMENTING THE FORMULA YOU OBTAINED, AS PART OF EXERCISE 1, FOR r(t+dt) HERE
     
     result = [r_fut, v_fut, rp_fut]
@@ -177,3 +164,46 @@ plt.show()
 ### mean energy for next to last and last ten thousand time steps: does each equal k_B*T? are they similar to each other?
 print("Mean Energy for next to last 100000 time steps of the trajectory is ",np.mean(e_vs_t[(N_updates-20000):(N_updates-10000)])," Hartrees")
 print("Mean Energy for last 100000 time steps of the trajectory is ",np.mean(e_vs_t[(N_updates-10000):N_updates])," Hartrees")
+
+''' Questions::
+Exercise 1: (a) Substitute the right-hand side of Equation 3 for ... wherever the latterterm appears in Equations 4 & 5 
+and (b) substitute the left-hand side of Equation 6 or Equation 7wherever you can rearrange terms (after the substitution of 
+part a) to have the right hand side Equation 6 or Equation 7 as an expression in another equation. (c) Answer the 
+following questions
+• What equations do you obtain? 
+r(t +dt) = r(t) + (v(t) + a(t) (dt/2)) dt = r(t) + v(t)dt + a(t) (dt/2)**2
+v(t+dt) = (v(t) + a(t) (dt/2) + d_fut(t+dt) * dt/2) / 1+ gamma(dt/2)
+v(t) + a(t) + a_fut(t+dt) dt / (1+ gamma 9dt/2)
+
+• What exactly is different about these equations than the equations you used in your
+implementation of the velocity Verlet algorithm?
+These equations also compute the drag or the random perturbations. 
+
+• The Langevin equation given as Equation 1 differs from Newton’s second law by the
+inclusion of a “drag” (or “friction”) term and a random perturbation: if 𝛾 = 0 and
+𝑅(𝑡) = 0 (which already occurs when 𝛾 = 0 but also obtains if 𝑇 = 0), then Equation
+1 reduces to Newton’s second law and the equations you obtain should be the same as
+those for the velocity Verlet algorithm. Do your equations implementing the BBK
+algorithm reduce to the equations implementing the velocity Verlet algorithm when 𝛾 =0 and 𝑅(𝑡) = 0? 
+yes, they do. 
+
+Exercise 2: Modify the notebook So Much Potential Langevin.ipynb by (a) replacing the
+energy values in the notebook with those you calculated two weeks ago just like you did with your
+So Much Potential.ipynb notebook last week, and (b) adding code to the function BBK to
+implement the BBK algorithm (based on your results in Exercise 1): I have started you out, fill in
+the “blanks” in the code just like you did last week for the velocity Verlet algorithm.
+see code 
+
+Exercise 3: Run your code. How do your results differ from your simulation of bond vibrations for
+an isolated CO molecule? Does our system reach thermal equilibrium with a well-defined
+temperature: i.e. do the energies seem to converge to some sort of steady state? If so, is the welldefined temperature to 
+which our system converges the temperature used in the simulation: i.e.
+is the average energy toward the end of the trajectory approximately 𝑘𝐵𝑇 where 𝑇 is the
+temperature used in the BBK algorithm?
+
+The results differ from those simulated with  before because the systems simulated before were completely isolated. This system
+here is not completely isolated, it still exchanges energy/mass with its surroundings. This could be shown through the drag
+or random perturbations, that are computed for in the BBK system. 
+yes, the energies do converge into a steady state, this can be seen in the center. 
+yes, it is used in our simulation 
+'''
